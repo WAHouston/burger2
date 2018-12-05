@@ -1,8 +1,8 @@
 const express = require("express")
-const burger = require("../models/burger")
+const db = require("../models")
 const router = express.Router()
 router.get("/", function(req, res) {
-    burger.selectAll(function(data) {
+    db.burger.findAll({}).then(function(data) {
         var hbsObj = {
             burger: data
         }
@@ -10,12 +10,12 @@ router.get("/", function(req, res) {
     })
 })
 router.post("/api/burger", function(req, res) {
-    burger.insertOne(req.body.name, function(){
+    db.burger.create({burger_name: req.body.name}).then(function(){
         res.redirect("/")
     })
 })
 router.put("/api/burger/:id", function(req, res) {
-    burger.updateOne(req.params.id, function(){
+    db.burger.update({devoured: true}, {where: {id: req.params.id}}).then(function(){
         res.end()
     })
 })
